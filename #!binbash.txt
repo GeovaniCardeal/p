@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Verifica se o script está sendo executado como root (algumas funções podem precisar de permissões de administrador)
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Este script deve ser executado como root."
+    exit 1
+fi
+
+# Função para exibir o uso da CPU
+check_cpu() {
+    echo "=============================="
+    echo "          USO DA CPU          "
+    echo "=============================="
+    # Exibe o uso da CPU
+    mpstat | grep "all"
+}
+
+# Função para exibir o uso de memória
+check_memory() {
+    echo "=============================="
+    echo "        USO DA MEMÓRIA         "
+    echo "=============================="
+    # Exibe o uso de memória com resumo
+    free -h
+}
+
+# Função para verificar o espaço em disco
+check_disk() {
+    echo "=============================="
+    echo "        ESPAÇO EM DISCO        "
+    echo "=============================="
+    # Exibe o uso de disco
+    df -h /
+}
+
+# Função para listar processos que mais consomem recursos
+check_top_processes() {
+    echo "=============================="
+    echo "    PROCESSOS MAIS PESADOS     "
+    echo "=============================="
+    # Lista os 10 processos que mais consomem CPU e memória
+    ps aux --sort=-%mem | head -n 10
+}
+
+# Função para limpar caches de sistema
+clean_caches() {
+    echo "Limpando caches do sistema..."
+    sync; echo 3 > /proc/sys/vm/drop_caches
+    echo "Caches limpos."
+}
+
+# Função para exibir uptime do sistema
+check_uptime() {
+    echo "=============================="
+    echo "         TEMPO DE ATIVIDADE    "
+    echo "=============================="
+    # Exibe o uptime do sistema
+    uptime
+}
+
+# Função para exibir o menu
+show_menu() {
+    echo "===================================="
+    echo "   Monitoramento e Otimização do Sistema"
+    echo "===================================="
+    echo "1. Verificar uso da CPU"
+    echo "2. Verificar uso da memória"
+    echo "3. Verificar espaço em disco"
+    echo "4. Listar processos mais pesados"
+    echo "5. Limpar caches do sistema"
+    echo "6. Verificar tempo de atividade"
+    echo "7. Sair"
+    echo "===================================="
+}
+
+# Loop principal
+while true; do
+    show_menu
+    read -p "Escolha uma opção [1-7]: " OPTION
+    case $OPTION in
+        1)
+            check_cpu
+            ;;
+        2)
+            check_memory
+            ;;
+        3)
+            check_disk
+            ;;
+        4)
+            check_top_processes
+            ;;
+        5)
+            clean_caches
+            ;;
+        6)
+            check_uptime
+            ;;
+        7)
+            echo "Saindo..."
+            exit 0
+            ;;
+        *)
+            echo "Opção inválida. Tente novamente."
+            ;;
+    esac
+done
