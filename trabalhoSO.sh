@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Trablho feito por: Geovani Machado, Nadson Pereira e Pedro Yuri
+
 if [ "$(id -u)" -ne 0 ]; then
     echo "Este script deve ser executado como root."
     exit 1
