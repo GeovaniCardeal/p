@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Nome da equipe:
+# Alan Santos Cerqueira e Whebert Brandão Gentil
 
 # Função para verificar e instalar o pacote dialog, se necessário
 check_dependencies() {
